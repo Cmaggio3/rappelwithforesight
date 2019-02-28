@@ -41,8 +41,24 @@ function initMap() {
 
 	<script>
 		function ajaxmagic()
-		{
-            $.get("https://jacobsladder.herokuapp.com/");
+		{		
+			$.ajax({
+			url: "http://rappelwithforesight.herokuapp.com/Locations/1",
+			type: 'GET',
+			dataType: 'JSON',
+			beforeSend: function(){
+			//this will be triggered before sending the ajax request
+			console.log('Sending AJAX Request...');
+			},
+			success: function(response){
+			//this will be triggered when the request successfully gets completed
+			console.log(response); //will print the whole JSON
+			},
+			error: function(){
+			//this will be triggered when the request fails
+			console.log('Request Failed.');
+			}
+			});
 		}
 	</script>
 
