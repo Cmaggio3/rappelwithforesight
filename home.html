@@ -12,20 +12,47 @@
     </style>
   </head>
   <body>
-    <h3>My Google Maps Demo</h3>
+    <h3>Rappel With Foresight</h3>
     <!--The div element for the map -->
     <div id="map"></div>
     <script>
+	
+function getLocation()
+{		
+	$.ajax({
+	url: "https://rappelwithforesightapi.herokuapp.com/Locations/1",
+	type: 'GET',
+	dataType: 'JSON',
+	beforeSend: function(){
+	//this will be triggered before sending the ajax request
+	console.log('Sending AJAX Request...');
+	},
+	success: function(response){
+	//this will be triggered when the request successfully gets completed
+	console.log(response); //will print the whole JSON
+	initMap(response);
+	},
+	error: function(){
+	//this will be triggered when the request fails
+	console.log('Request Failed.');
+	}
+	});
+}
+	
+	
 // Initialize and add the map
-function initMap() {
+function initMap(location) {
   // The location of Uluru
-  var uluru = {lat: -25.344, lng: 131.036};
+  var uluru = {lat: location.Latitude, lng: location.Longitude};
+  //var uluru = {lat: -25.35, lng:42.12};
+  console.log("latitude recovered = " + location.Latitude);
   // The map, centered at Uluru
   var map = new google.maps.Map(
       document.getElementById('map'), {zoom: 4, center: uluru});
   // The marker, positioned at Uluru
   var marker = new google.maps.Marker({position: uluru, map: map});
 }
+
     </script>
     <!--Load the API from the specified URL
     * The async attribute allows the browser to render the page while the API loads
@@ -33,36 +60,14 @@ function initMap() {
     * The callback parameter executes the initMap() function
     -->
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCB3lqzCQ81xIiBLYokJNoTfgQOixyiIg&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCB3lqzCQ81xIiBLYokJNoTfgQOixyiIg&callback=getLocation">
     </script>
 	
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	
 
-	<script>
-		function ajaxmagic()
-		{		
-			$.ajax({
-			url: "https://rappelwithforesightapi.herokuapp.com/Locations/1",
-			type: 'GET',
-			dataType: 'JSON',
-			beforeSend: function(){
-			//this will be triggered before sending the ajax request
-			console.log('Sending AJAX Request...');
-			},
-			success: function(response){
-			//this will be triggered when the request successfully gets completed
-			console.log(response); //will print the whole JSON
-			},
-			error: function(){
-			//this will be triggered when the request fails
-			console.log('Request Failed.');
-			}
-			});
-		}
-	</script>
-
-    <input type="button" value = "use ajax", onclick="ajaxmagic()">
+    <input type="button" value = "use ajax", onclick="getLocation()">
     <span id="fromAjax"></span>	
 	
   </body>
