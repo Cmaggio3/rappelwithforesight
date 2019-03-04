@@ -9,7 +9,7 @@
 	<body>
 		<script>
 			function getAllUrlParams(url) {
-
+			
 			  // get query string from url (optional) or window
 			  var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
 
@@ -69,10 +69,11 @@
 				  }
 				}
 			  }
-			  console.log(obj);
 			  document.getElementById("test").innerHTML = "hello";
+			  console.log(obj);
 			  return obj;
 			}
+			result = getAllUrlParams(window.location.toString());
 		</script>
 		<p id="test"></p>
 	</body>
