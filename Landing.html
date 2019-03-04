@@ -1,0 +1,23 @@
+<?php header('Access-Control-Allow-Origin: *'); ?>
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<a href="file:///D:/Dropbox/.Spring%202019/CS%204365/Project/home.html" title=	"test">
+		Testing</a>
+	</head>
+	<body>
+		<script>
+			function getUrlVars(){
+				var vars = {};
+				var parts = window.location.href.replace(/[?&]+(^=&]+)=([^&]*)/gi,
+												function(m,key,value){
+					vars[key] = value;
+				});
+			console.log(vars);
+			return vars;
+			}
+		</script>
+		
+	</body>
+</html>
