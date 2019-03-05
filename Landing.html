@@ -7,113 +7,54 @@
 		Testing</a>
 	</head>
 	<body>
-		<select id="dropdow"></select>
-		<p id="test"></p>
-		<script>
-			function getLocationList() {
-				var helpers =
+		<select id="dropdown" onChange="selectLocation()"></select>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		
+		<script> //Populate dropdown
+			var helpers =
+			{
+			   
+				buildDropdown: function(result, dropdown, emptyMessage)
 				{
-					buildDropdown: function(result, dropdown, emptyMessage)
+					//Remove current options
+					dropdown.html('');
+					
+					// Add the empty option with the empty message-box
+					dropdown.append('<option value="">' + emptyMessage + '</option>');
+					
+					//check result isnt empty
+					if(result != '')
 					{
-						//Remove current options
-						dropdown.html('');
-						
-						// Add the empty option with the empty message-box
-						dropdown.append('<option value="">' + emptyMessage + '</option>');
-						
-						//check result isnt empty
-						if(result != '')
-						{
-							//loop through each of the results and append the option to the dropdown
-							$.each(result, function(j,v){
-								dorpdown.append('<option value="' + v.id + '">' + v.name + '</option>');
-							});
-						}
+						console.log("inside")
+						//loop through each of the results and append the option to the dropdown
+						$.each(result, function(j,v){
+							dropdown.append('<option value="' + v.LocationID + '">' + v.LocationName + '</option>');
+						});
 					}
 				}
-			
-				$.ajax({
-				url: "https://rappelwithforesightapi.herokuapp.com/Locations/",
-				type: 'GET',
-				dataType: 'JSON',
-				success: function(data)
-				{
-					helpers.buildDropdown(
-						jQuery.parseJSON(data),
-						$('#dropdown'),
-						'Select an option'
-					);
-				}
-				});
 			}
+		
+			$.ajax({
+			url: "https://rappelwithforesightapi.herokuapp.com/Locations/",
+			type: 'GET',
+			dataType: 'JSON',
+			success: function(data)
+			{
+				console.log(data)
+				helpers.buildDropdown(
+					data,
+					$('#dropdown'),
+					'Select an option'
+				);
+			}
+			});
 		</script>
 		<script>
-			function getAllUrlParams(url) {
-			
-			  // get query string from url (optional) or window
-			  var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
-
-			  // we'll store the parameters here
-			  var obj = {};
-
-			  // if query string exists
-			  if (queryString) {
-
-				// stuff after # is not part of query string, so get rid of it
-				queryString = queryString.split('#')[0];
-
-				// split our query string into its component parts
-				var arr = queryString.split('&');
-
-				for (var i = 0; i < arr.length; i++) {
-				  // separate the keys and the values
-				  var a = arr[i].split('=');
-
-				  // set parameter name and value (use 'true' if empty)
-				  var paramName = a[0];
-				  var paramValue = typeof (a[1]) === 'undefined' ? true : a[1];
-
-				  // (optional) keep case consistent
-				  paramName = paramName.toLowerCase();
-				  if (typeof paramValue === 'string') paramValue = paramValue.toLowerCase();
-
-				  // if the paramName ends with square brackets, e.g. colors[] or colors[2]
-				  if (paramName.match(/\[(\d+)?\]$/)) {
-
-					// create key if it doesn't exist
-					var key = paramName.replace(/\[(\d+)?\]/, '');
-					if (!obj[key]) obj[key] = [];
-
-					// if it's an indexed array e.g. colors[2]
-					if (paramName.match(/\[\d+\]$/)) {
-					  // get the index value and add the entry at the appropriate position
-					  var index = /\[(\d+)\]/.exec(paramName)[1];
-					  obj[key][index] = paramValue;
-					} else {
-					  // otherwise add the value to the end of the array
-					  obj[key].push(paramValue);
-					}
-				  } else {
-					// we're dealing with a string
-					if (!obj[paramName]) {
-					  // if it doesn't exist, create property
-					  obj[paramName] = paramValue;
-					} else if (obj[paramName] && typeof obj[paramName] === 'string'){
-					  // if property does exist and it's a string, convert it to an array
-					  obj[paramName] = [obj[paramName]];
-					  obj[paramName].push(paramValue);
-					} else {
-					  // otherwise add the property
-					  obj[paramName].push(paramValue);
-					}
-				  }
-				}
-			  }
-			  document.getElementById("test").innerHTML = obj;
-			  console.log(obj);
-			  return obj;
+			var myDropdown=document.getElementById('dropdown');
+			function selectLocation(){
+				window.location.href = "home.html/?Id=" + myDropdown.value 
 			}
-			result = getAllUrlParams(window.location.toString());
 		</script>
+	
 	</body>
 </html>
