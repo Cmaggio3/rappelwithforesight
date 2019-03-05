@@ -7,7 +7,45 @@
 		Testing</a>
 	</head>
 	<body>
+		<select id="dropdow"></select>
 		<p id="test"></p>
+		<script>
+			function getLocationList() {
+				var helpers =
+				{
+					buildDropdown: function(result, dropdown, emptyMessage)
+					{
+						//Remove current options
+						dropdown.html('');
+						
+						// Add the empty option with the empty message-box
+						dropdown.append('<option value="">' + emptyMessage + '</option>');
+						
+						//check result isnt empty
+						if(result != '')
+						{
+							//loop through each of the results and append the option to the dropdown
+							$.each(result, function(j,v){
+								dorpdown.append('<option value="' + v.id + '">' + v.name + '</option>');
+							});
+						}
+					}
+				}
+			
+				$.ajax({
+				url: "https://rappelwithforesightapi.herokuapp.com/Locations/",
+				type: 'GET',
+				dataType: 'JSON',
+				success: function(data)
+				{
+					helpers.buildDropdown(
+						jQuery.parseJSON(data),
+						$('#dropdown'),
+						'Select an option'
+					);
+				}
+			}
+		</script>
 		<script>
 			function getAllUrlParams(url) {
 			
