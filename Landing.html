@@ -32,19 +32,19 @@
 					}
 				}
 			
-				$.ajax({
-				url: "https://rappelwithforesightapi.herokuapp.com/Locations/",
-				type: 'GET',
-				dataType: 'JSON',
-				success: function(data)
-				{
-					helpers.buildDropdown(
-						jQuery.parseJSON(data),
-						$('#dropdown'),
-						'Select an option'
-					);
-				}
+			$.ajax({
+			url: "https://rappelwithforesightapi.herokuapp.com/Locations/",
+			type: 'GET',
+			dataType: 'JSON',
+			success: function(data)
+			{
+				helpers.buildDropdown(
+					jQuery.parseJSON(data),
+					$('#dropdown'),
+					'Select an option'
+				);
 			}
+			});
 		</script>
 		<script>
 			function getAllUrlParams(url) {
