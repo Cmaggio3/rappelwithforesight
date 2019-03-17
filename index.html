@@ -15,31 +15,6 @@
     <h3>Rappel With Foresight</h3>
     <!--The div element for the map -->
     <div id="map"></div>
-    <script>
-	
-		function getLocation()
-		{		
-			$.ajax({
-			url: "https://rappelwithforesightapi.herokuapp.com/Locations/1",
-			type: 'GET',
-			dataType: 'JSON',
-			beforeSend: function(){
-			//this will be triggered before sending the ajax request
-			console.log('Sending AJAX Request...');
-			},
-			success: function(response){
-			//this will be triggered when the request successfully gets completed
-			console.log(response); //will print the whole JSON
-			//initMap(response);
-			},
-			error: function(){
-			//this will be triggered when the request fails
-			console.log('Request Failed.');
-			}
-			});
-		}
-    </script>
-
 	
 	<script>
 		function showAllLocations(locations){
@@ -122,86 +97,7 @@
 		}
 	
 	
-	</script>
-	
-	<script>
-	
-	
-		function showSelectedLocation(location){
-			var map = new google.maps.Map(document.getElementById('map'),{zoom:6});
-			
-				var latlong = {lat: location.Latitude, lng:location.Longitude}
-				var url = "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
-				if (location.LocationSafe == 0)
-				{
-					url = "http://map.google.com/mapfiles/ms/icons/red-dot.png"
-				}
-				var marker = new google.maps.Marker({
-					position:latlong,
-					map:map,
-					icon:{
-						url:url
-					},
-					label:{
-						text:location.LocationName,
-						color:'grey'
-					}
-				});
-				content = location
-				var infowindow = new google.maps.InfoWindow();
-				google.maps.event.addListener(marker,'click',(function(marker,content,infowindow){
-					return function(){
-						//infowindow.setContent(content);
-						//infowindow.open(map,marker);
-						document.getElementById("displayLocationName").innerHTML = content.LocationName;
-						document.getElementById("displayLocationLat").innerHTML = content.Latitude;
-						document.getElementById("displayLocationLng").innerHTML = content.Longitude;
-					};
-				})(marker,content,infowindow));
-				
-
-				var RouteOnRiverCoordinatesEncoded = location.RouteOnRiverEncoded
-				
-				var RouteOnRiverCoordinates = google.maps.geometry.encoding.decodePath(RouteOnRiverCoordinatesEncoded)
-				
-				var RouteOnRiver = new google.maps.Polyline({
-					path:RouteOnRiverCoordinates,
-					geodesic: true,
-					strokeColor: '#0000FF',
-					strokeOpacity:1.0,
-					strokeWeight:2
-				});
-
-				RouteOnRiver.setMap(map);
-				
-				
-			map.setCenter(marker.getPosition())
-		}
-	
-		function PopulateSelected(SelectedLocationId){
-			$.ajax({
-				url: "https://rappelwithforesightapi.herokuapp.com/Locations/"+selectedLocationId,
-				type: 'GET',
-				dataType: 'JSON',
-				beforeSend: function(){
-				//this will be triggered before sending the ajax request
-				console.log('Sending AJAX Request...');
-				},
-				success: function(response){
-				//this will be triggered when the request successfully gets completed
-				console.log(response); //will print the whole JSON
-				showSelectedLocation(response);
-				},
-				error: function(){
-				//this will be triggered when the request fails
-				console.log('Request Failed.');
-				}
-			})
-		}
-	
-	</script>
-	
-	
+	</script>	
 	<script>
 		function TestPush(){
 			//test insertion into locations

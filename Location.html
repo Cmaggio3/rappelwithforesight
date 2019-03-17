@@ -12,6 +12,12 @@
     </style>
 </head>
 <body>
+	<h3>Specific Location</h3>
+    <!--The div element for the map -->
+    <div id="map"></div>
+	
+
+
 	<script>
 		function showSelectedLocation(location){
 			var map = new google.maps.Map(document.getElementById('map'),{zoom:6});
@@ -64,7 +70,8 @@
 			map.setCenter(marker.getPosition())
 		}
 	
-		function PopulateSelected(SelectedLocationId){
+		function PopulateSelected(){
+			var selectedLocationId =GetURLParameter('LocationId')
 			$.ajax({
 				url: "https://rappelwithforesightapi.herokuapp.com/Locations/"+selectedLocationId,
 				type: 'GET',
@@ -102,11 +109,15 @@
 				}
 			}
 			return null
-		}
-	
-	console.log(GetURLParameter('LocationId'));
-	
+		}	
 	</script>
+	
+	<script async defer
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCB3lqzCQ81xIiBLYokJNoTfgQOixyiIg&libraries=geometry&callback=PopulateSelected">
+    </script>
+	
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	
 	<P id = 'test'></p>
 	<P id = 'test2'></p>
