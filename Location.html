@@ -1,0 +1,113 @@
+<?php header('Access-Control-Allow-Origin: *'); ?>
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       /* Set the size of the div element that contains the map */
+      #map {
+        height: 400px;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
+    </style>
+</head>
+<body>
+	<script>
+		function showSelectedLocation(location){
+			var map = new google.maps.Map(document.getElementById('map'),{zoom:6});
+			
+				var latlong = {lat: location.Latitude, lng:location.Longitude}
+				var url = "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+				if (location.LocationSafe == 0)
+				{
+					url = "http://map.google.com/mapfiles/ms/icons/red-dot.png"
+				}
+				var marker = new google.maps.Marker({
+					position:latlong,
+					map:map,
+					icon:{
+						url:url
+					},
+					label:{
+						text:location.LocationName,
+						color:'grey'
+					}
+				});
+				content = location
+				var infowindow = new google.maps.InfoWindow();
+				google.maps.event.addListener(marker,'click',(function(marker,content,infowindow){
+					return function(){
+						//infowindow.setContent(content);
+						//infowindow.open(map,marker);
+						document.getElementById("displayLocationName").innerHTML = content.LocationName;
+						document.getElementById("displayLocationLat").innerHTML = content.Latitude;
+						document.getElementById("displayLocationLng").innerHTML = content.Longitude;
+					};
+				})(marker,content,infowindow));
+				
+
+				var RouteOnRiverCoordinatesEncoded = location.RouteOnRiverEncoded
+				
+				var RouteOnRiverCoordinates = google.maps.geometry.encoding.decodePath(RouteOnRiverCoordinatesEncoded)
+				
+				var RouteOnRiver = new google.maps.Polyline({
+					path:RouteOnRiverCoordinates,
+					geodesic: true,
+					strokeColor: '#0000FF',
+					strokeOpacity:1.0,
+					strokeWeight:2
+				});
+
+				RouteOnRiver.setMap(map);
+				
+				
+			map.setCenter(marker.getPosition())
+		}
+	
+		function PopulateSelected(SelectedLocationId){
+			$.ajax({
+				url: "https://rappelwithforesightapi.herokuapp.com/Locations/"+selectedLocationId,
+				type: 'GET',
+				dataType: 'JSON',
+				beforeSend: function(){
+				//this will be triggered before sending the ajax request
+				console.log('Sending AJAX Request...');
+				},
+				success: function(response){
+				//this will be triggered when the request successfully gets completed
+				console.log(response); //will print the whole JSON
+				showSelectedLocation(response);
+				},
+				error: function(){
+				//this will be triggered when the request fails
+				console.log('Request Failed.');
+				}
+			})
+		}
+	</script>
+	
+	
+	<script>
+		//Get the parameters from the url
+		function GetURLParameter(sParam)
+		{
+			var sPageURL = window.location.search.substring(1);
+			var sURLVariables = sPageURL.split('&');
+			for (var i = 0; i < sURLVariables.length; i++) 
+			{
+				var sParameterName = sURLVariables[i].split('=');
+				if (sParameterName[0] == sParam) 
+				{
+					return sParameterName[1];
+				}
+			}
+			return null
+		}
+	
+	console.log(GetURLParameter('LocationId'));
+	
+	</script>
+	
+	<P id = 'test'></p>
+	
+<body>
