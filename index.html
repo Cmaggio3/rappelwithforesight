@@ -1,0 +1,243 @@
+<?php header('Access-Control-Allow-Origin: *'); ?>
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       /* Set the size of the div element that contains the map */
+      #map {
+        height: 400px;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
+    </style>
+  </head>
+  <body>
+    <h3>Rappel With Foresight</h3>
+    <!--The div element for the map -->
+    <div id="map"></div>
+    <script>
+	
+		function getLocation()
+		{		
+			$.ajax({
+			url: "https://rappelwithforesightapi.herokuapp.com/Locations/1",
+			type: 'GET',
+			dataType: 'JSON',
+			beforeSend: function(){
+			//this will be triggered before sending the ajax request
+			console.log('Sending AJAX Request...');
+			},
+			success: function(response){
+			//this will be triggered when the request successfully gets completed
+			console.log(response); //will print the whole JSON
+			//initMap(response);
+			},
+			error: function(){
+			//this will be triggered when the request fails
+			console.log('Request Failed.');
+			}
+			});
+		}
+    </script>
+
+	
+	<script>
+		function showAllLocations(locations){
+			var map = new google.maps.Map(document.getElementById('map'),{zoom:6});
+			
+			for(var i = 0; i < locations.length; i++){
+				var location = locations[i];
+				var latlong = {lat: location.Latitude, lng:location.Longitude}
+				var url = "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+				if (location.LocationSafe == 0)
+				{
+					url = "http://map.google.com/mapfiles/ms/icons/red-dot.png"
+				}
+				var marker = new google.maps.Marker({
+					position:latlong,
+					map:map,
+					icon:{
+						url:url
+					},
+					label:{
+						text:location.LocationName,
+						color:'grey'
+					}
+				});
+				content = location
+				var infowindow = new google.maps.InfoWindow();
+				google.maps.event.addListener(marker,'click',(function(marker,content,infowindow){
+					return function(){
+						//infowindow.setContent(content);
+						//infowindow.open(map,marker);
+						
+						showSelectedLocation(content);
+						
+						
+						document.getElementById("displayLocationName").innerHTML = content.LocationName;
+						document.getElementById("displayLocationLat").innerHTML = content.Latitude;
+						document.getElementById("displayLocationLng").innerHTML = content.Longitude;
+					};
+				})(marker,content,infowindow));
+				
+
+				var RouteOnRiverCoordinatesEncoded = location.RouteOnRiverEncoded
+				
+				var RouteOnRiverCoordinates = google.maps.geometry.encoding.decodePath(RouteOnRiverCoordinatesEncoded)
+				
+				var RouteOnRiver = new google.maps.Polyline({
+					path:RouteOnRiverCoordinates,
+					geodesic: true,
+					strokeColor: '#0000FF',
+					strokeOpacity:1.0,
+					strokeWeight:2
+				});
+
+				RouteOnRiver.setMap(map);
+				
+				
+			}
+			map.setCenter(marker.getPosition())
+		}
+	
+		function PopulateAll(){
+			$.ajax({
+			url: "https://rappelwithforesightapi.herokuapp.com/Locations",
+			type: 'GET',
+			dataType: 'JSON',
+			beforeSend: function(){
+			//this will be triggered before sending the ajax request
+			console.log('Sending AJAX Request...');
+			},
+			success: function(response){
+			//this will be triggered when the request successfully gets completed
+			console.log(response); //will print the whole JSON
+			showAllLocations(response);
+			},
+			error: function(){
+			//this will be triggered when the request fails
+			console.log('Request Failed.');
+			}
+			});
+		}
+	
+	
+	</script>
+	
+	<script>
+	
+	
+		function showSelectedLocation(location){
+			var map = new google.maps.Map(document.getElementById('map'),{zoom:6});
+			
+				var latlong = {lat: location.Latitude, lng:location.Longitude}
+				var url = "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+				if (location.LocationSafe == 0)
+				{
+					url = "http://map.google.com/mapfiles/ms/icons/red-dot.png"
+				}
+				var marker = new google.maps.Marker({
+					position:latlong,
+					map:map,
+					icon:{
+						url:url
+					},
+					label:{
+						text:location.LocationName,
+						color:'grey'
+					}
+				});
+				content = location
+				var infowindow = new google.maps.InfoWindow();
+				google.maps.event.addListener(marker,'click',(function(marker,content,infowindow){
+					return function(){
+						//infowindow.setContent(content);
+						//infowindow.open(map,marker);
+						document.getElementById("displayLocationName").innerHTML = content.LocationName;
+						document.getElementById("displayLocationLat").innerHTML = content.Latitude;
+						document.getElementById("displayLocationLng").innerHTML = content.Longitude;
+					};
+				})(marker,content,infowindow));
+				
+
+				var RouteOnRiverCoordinatesEncoded = location.RouteOnRiverEncoded
+				
+				var RouteOnRiverCoordinates = google.maps.geometry.encoding.decodePath(RouteOnRiverCoordinatesEncoded)
+				
+				var RouteOnRiver = new google.maps.Polyline({
+					path:RouteOnRiverCoordinates,
+					geodesic: true,
+					strokeColor: '#0000FF',
+					strokeOpacity:1.0,
+					strokeWeight:2
+				});
+
+				RouteOnRiver.setMap(map);
+				
+				
+			map.setCenter(marker.getPosition())
+		}
+	
+		function PopulateSelected(SelectedLocationId){
+			$.ajax({
+				url: "https://rappelwithforesightapi.herokuapp.com/Locations/"+selectedLocationId,
+				type: 'GET',
+				dataType: 'JSON',
+				beforeSend: function(){
+				//this will be triggered before sending the ajax request
+				console.log('Sending AJAX Request...');
+				},
+				success: function(response){
+				//this will be triggered when the request successfully gets completed
+				console.log(response); //will print the whole JSON
+				showSelectedLocation(response);
+				},
+				error: function(){
+				//this will be triggered when the request fails
+				console.log('Request Failed.');
+				}
+			})
+		}
+	
+	</script>
+	
+	
+	<script>
+		function TestPush(){
+			//test insertion into locations
+			var testData = {Latitude: 34.12, Longitude: 81.0, LocationName: "TestLocation"}
+			var saveData = $.ajax({
+				type: "POST",
+				url: "https://rappelwithforesightapi.herokuapp.com/Locations",
+				data: {Latitude: 34.12, Longitude: 81.0, LocationName: 'TestLocation'},
+				dataType: "text",
+			});
+		}
+	</script>
+	
+	
+	
+    <!--Load the API from the specified URL
+    * The async attribute allows the browser to render the page while the API loads
+    * The key parameter will contain your own API key (which is not needed for this tutorial)
+    * The callback parameter executes the initMap() function
+    -->
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCB3lqzCQ81xIiBLYokJNoTfgQOixyiIg&libraries=geometry&callback=PopulateAll">
+    </script>
+	
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	
+   <input type="button" value = "Main view", onclick="PopulateAll()">
+
+    <span id="fromAjax"></span>	
+	
+	<input type="button" value = "test push", onclick="TestPush()">
+	
+	<p id='displayLocationName'>No Location Selected</p>
+	<p id='displayLocationLat'></p>
+	<p id='displayLocationLng'></p>
+	
+  </body>
+</html>
