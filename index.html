@@ -45,9 +45,7 @@
 					return function(){
 						//infowindow.setContent(content);
 						//infowindow.open(map,marker);
-						
-						showSelectedLocation(content);
-						
+						window.location.href = "./Location.html?LocationId="+content.LocationId
 						
 						document.getElementById("displayLocationName").innerHTML = content.LocationName;
 						document.getElementById("displayLocationLat").innerHTML = content.Latitude;
