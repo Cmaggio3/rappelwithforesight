@@ -23,10 +23,10 @@
 			for(var i = 0; i < locations.length; i++){
 				var location = locations[i];
 				var latlong = {lat: location.Latitude, lng:location.Longitude}
-				var url = "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+				var url = "https://maps.google.com/mapfiles/ms/icons/green-dot.png"
 				if (location.LocationSafe == 0)
 				{
-					url = "http://map.google.com/mapfiles/ms/icons/red-dot.png"
+					url = "https://map.google.com/mapfiles/ms/icons/red-dot.png"
 				}
 				var marker = new google.maps.Marker({
 					position:latlong,
