@@ -19,52 +19,73 @@
 
 
 	<script>
+		var options = [
+				{name:"start",color:"https://map.google.com/mapfiles/ms/icons/green-dot.png"},
+				{name:"end",color:"https://map.google.com/mapfiles/ms/icons/red-dot.png"},
+				{name:"Long Rappel",color:"https://map.google.com/mapfiles/ms/icons/blue-dot.png"},
+				{name:"Short Rappel",color:"https://map.google.com/mapfiles/ms/icons/blue-dot.png"},
+				{name:"Slide",color:"https://map.google.com/mapfiles/ms/icons/yellow-dot.png"},
+				{name:"Route",color:"something's wrong"}
+			]
 		function showSelectedLocation(location){
 			var map = new google.maps.Map(document.getElementById('map'),{zoom:6});
-			
-				var latlong = {lat: location.Latitude, lng:location.Longitude}
-				var url = "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
-				if (location.LocationSafe == 0)
+			console.log('hello')
+			console.log(eval(location.Markers))
+			var markers = eval(location.Markers)
+			for(var i = 0; i < markers.length; i++){
+				var latlong = {lat: parseFloat(markers[i].lat),lng:parseFloat(markers[i].lng)} 
+				url = "https://map.google.com/mapfiles/ms/icons/green-dot.png"
+				if(markers[i].type == "end")
 				{
-					url = "http://map.google.com/mapfiles/ms/icons/red-dot.png"
+					url = "https://map.google.com/mapfiles/ms/icons/red-dot.png"
+				}
+				if(markers[i].type == "Long Rappel")
+				{
+					url = "https://map.google.com/mapfiles/ms/icons/blue-dot.png"
+				}
+				if(markers[i].type == "Short Rappel")
+				{
+					url = "https://map.google.com/mapfiles/ms/icons/blue-dot.png"
+				}
+				if(markers[i].type == "Slide")
+				{
+					url = "https://map.google.com/mapfiles/ms/icons/yellow-dot.png"
 				}
 				var marker = new google.maps.Marker({
 					position:latlong,
 					map:map,
-					icon:{
+					icon:
+					{
 						url:url
-					},
-					label:{
-						text:location.LocationName,
-						color:'grey'
 					}
-				});
-				content = location
+				})
+				
+				content = markers[i].type
 				var infowindow = new google.maps.InfoWindow();
 				google.maps.event.addListener(marker,'click',(function(marker,content,infowindow){
 					return function(){
-						//infowindow.setContent(content);
-						//infowindow.open(map,marker);
-						//document.getElementById("displayLocationName").innerHTML = content.LocationName;
-						//document.getElementById("displayLocationLat").innerHTML = content.Latitude;
-						//document.getElementById("displayLocationLng").innerHTML = content.Longitude;
+						infowindow.setContent(content);
+						infowindow.open(map,marker);
 					};
 				})(marker,content,infowindow));
-				
+			}
+			
+			
 
-				var RouteOnRiverCoordinatesEncoded = location.RouteOnRiverEncoded
-				
-				var RouteOnRiverCoordinates = google.maps.geometry.encoding.decodePath(RouteOnRiverCoordinatesEncoded)
-				
-				var RouteOnRiver = new google.maps.Polyline({
-					path:RouteOnRiverCoordinates,
-					geodesic: true,
-					strokeColor: '#0000FF',
-					strokeOpacity:1.0,
-					strokeWeight:2
-				});
+			
+			var RouteOnRiverCoordinatesEncoded = location.Route
+			
+			var RouteOnRiverCoordinates = google.maps.geometry.encoding.decodePath(RouteOnRiverCoordinatesEncoded)
+			
+			var RouteOnRiver = new google.maps.Polyline({
+				path:RouteOnRiverCoordinates,
+				geodesic: true,
+				strokeColor: '#0000FF',
+				strokeOpacity:1.0,
+				strokeWeight:2
+			});
 
-				RouteOnRiver.setMap(map);
+			RouteOnRiver.setMap(map);
 				
 				
 			map.setCenter(marker.getPosition())
@@ -72,6 +93,7 @@
 	
 		function PopulateSelected(){
 			var selectedLocationId =GetURLParameter('LocationId')
+			selectedLocationId = 42
 			$.ajax({
 				url: "https://rappelwithforesightapi.herokuapp.com/Locations/"+selectedLocationId,
 				type: 'GET',
@@ -119,6 +141,5 @@
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	
-	<P id = 'test'></p>
-	<P id = 'test2'></p>
+	<input type="button" value = "Back", onclick="window.location.href='./index.html'">
 <body>

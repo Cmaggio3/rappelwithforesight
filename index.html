@@ -19,7 +19,6 @@
 	<script>
 		function showAllLocations(locations){
 			var map = new google.maps.Map(document.getElementById('map'),{zoom:6});
-			
 			for(var i = 0; i < locations.length; i++){
 				var location = locations[i];
 				var latlong = {lat: location.Latitude, lng:location.Longitude}
@@ -53,8 +52,8 @@
 					};
 				})(marker,content,infowindow));
 				
-
-				var RouteOnRiverCoordinatesEncoded = location.RouteOnRiverEncoded
+				/*
+				var RouteOnRiverCoordinatesEncoded = location.Route
 				
 				var RouteOnRiverCoordinates = google.maps.geometry.encoding.decodePath(RouteOnRiverCoordinatesEncoded)
 				
@@ -67,7 +66,7 @@
 				});
 
 				RouteOnRiver.setMap(map);
-				
+				*/
 				
 			}
 			map.setCenter(marker.getPosition())
@@ -84,7 +83,6 @@
 			},
 			success: function(response){
 			//this will be triggered when the request successfully gets completed
-			console.log(response); //will print the whole JSON
 			showAllLocations(response);
 			},
 			error: function(){
@@ -96,18 +94,7 @@
 	
 	
 	</script>	
-	<script>
-		function TestPush(){
-			//test insertion into locations
-			var testData = {Latitude: 34.12, Longitude: 81.0, LocationName: "TestLocation"}
-			var saveData = $.ajax({
-				type: "POST",
-				url: "https://rappelwithforesightapi.herokuapp.com/Locations",
-				data: {Latitude: 34.12, Longitude: 81.0, LocationName: 'TestLocation'},
-				dataType: "text",
-			});
-		}
-	</script>
+
 	
 	
 	
@@ -122,18 +109,9 @@
 	
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	
-   <input type="button" value = "Main view", onclick="PopulateAll()">
 
-    <span id="fromAjax"></span>	
-	
-	<input type="button" value = "test push", onclick="TestPush()">
-	
-	<input type="button" value = "next page", onclick="window.location.href='./Location.html'">
-	
-	<p id='displayLocationName'>No Location Selected</p>
-	<p id='displayLocationLat'></p>
-	<p id='displayLocationLng'></p>
+    <span id="fromAjax"></span>		
+	<input type="button" value = "Create New Location", onclick="window.location.href='./LocationEdit.html'">
 	
   </body>
 </html>

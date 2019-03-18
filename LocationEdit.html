@@ -1,0 +1,182 @@
+<?php header('Access-Control-Allow-Origin: *'); ?>
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       /* Set the size of the div element that contains the map */
+      #map {
+        height: 400px;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
+    </style>
+  </head>
+  <body>
+    <h3>Rappel With Foresight</h3>
+    <!--The div element for the map -->
+    <div id="map"></div>
+	
+	<input type="button" value = "Back", onclick="window.location.href='.index.html"></input>
+	<select id="dropdown" onChange="selectionMade()"></select>
+	<input type="button" value = "Publish", onclick="Publish()"></input>
+    <span id="fromAjax"></span>	
+	
+	<div>Location Data</div>
+	
+    <input type="text" id="locationName" />
+	<button onclick="myJsFunction()">Update Name</button>
+	<script type="text/javascript">
+	 function myJsFunction(){
+		locationName=document.getElementById('locationName').value;
+	 }
+	</script>
+	
+	<script>
+	
+		var markers =[]
+		var encodedPath = ""
+		var locationName = document.getElementById("locationName").value
+		var startLat = ""
+		var startLng = ""
+	
+	    function initMap() {
+			var map = new google.maps.Map(document.getElementById('map'), {
+			  zoom: 7,
+			  center: {lat: 34.366, lng: -82.519}
+			});
+			var poly = new google.maps.Polyline({
+			  strokeColor: '#ff0000',
+			  strokeOpacity: 1,
+			  strokeWeight: 3,
+			  map: map
+			});
+
+
+			// Add a listener for the click event
+			google.maps.event.addListener(map, 'click', function(event) {
+				if(POIType.name == 'Route')
+				{
+					addLatLngToPoly(event.latLng, poly);
+				} else 
+				{
+					addPOI(event.latLng,map);
+				}
+			
+			});
+		}
+	
+		/**
+		* Handles click events on a map, and adds a new point to the Polyline.
+		* Updates the encoding text area with the path's encoded values.
+		*/
+		function addLatLngToPoly(latLng, poly) {
+			var path = poly.getPath();
+			// Because path is an MVCArray, we can simply append a new coordinate
+			// and it will automatically appear
+			path.push(latLng);
+
+			// Update the text field to display the polyline encodings
+			encodedPath = google.maps.geometry.encoding.encodePath(path);
+			//if (encodeString) {
+			//  document.getElementById('encoded-polyline').value = encodeString;
+			//}
+		}
+		
+		function addPOI(location,map){		
+			marker = new google.maps.Marker({
+				position: location,
+				map:map,
+				icon:
+				{
+					url:POIType.color
+				},
+			});
+			
+			var lat = marker.position.lat()
+			var lng = marker.position.lng()
+			
+			var content = POIType
+			var infowindow = new google.maps.InfoWindow();
+			google.maps.event.addListener(marker,'click',(function(marker,content,infowindow){
+				return function(){
+					marker.set('labelContent',content.name)
+					infowindow.setContent(content.name);
+					infowindow.open(map,marker);
+				};
+			})(marker,content,infowindow));
+			
+			if(POIType.name == "start")
+			{
+				startLat = lat
+				startLng = lng
+			}
+			
+			var markerJson = {'lat':lat,'lng':lng,'type':POIType.name}
+			//markers.push(JSON.stringify(markerJson))
+			markers.push(markerJson)
+			console.log(markers)
+		}
+	</script>
+
+	<script>
+		function Publish(){
+			//test insertion into locations
+			var data = {Latitude: startLat, Longitude: startLng, LocationName: locationName,Markers:markers,Route:encodedPath}
+			console.log(data)
+			var saveData = $.ajax({
+				type: "POST",
+				url: "https://rappelwithforesightapi.herokuapp.com/Locations",
+				data: data,
+				dataType: "json",
+			});
+		}
+	</script>
+	
+	
+	
+	<script>//dropdown selection code
+		var POIType = {name:"start",color:"https://map.google.com/mapfiles/ms/icons/green-dot.png"}
+		var select = document.getElementById("dropdown")
+		var options = [
+						{name:"start",color:"https://map.google.com/mapfiles/ms/icons/green-dot.png"},
+						{name:"end",color:"https://map.google.com/mapfiles/ms/icons/red-dot.png"},
+						{name:"Long Rappel",color:"https://map.google.com/mapfiles/ms/icons/blue-dot.png"},
+						{name:"Short Rappel",color:"https://map.google.com/mapfiles/ms/icons/blue-dot.png"},
+						{name:"Slide",color:"https://map.google.com/mapfiles/ms/icons/yellow-dot.png"},
+						{name:"Route",color:"something's wrong"}
+					]
+		
+		for(var i = 0; i < options.length; i++) {
+			var opt = options[i].name;
+			var el = document.createElement("option");
+			el.textContent = opt;
+			el.value = opt;
+			select.append(el);
+		}
+		
+		
+		
+		function selectionMade() {
+		    var par=document.getElementById('dropdown');
+			var index=par.selectedIndex
+			POIType=options[index]
+		}
+		
+	</script>
+	
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCB3lqzCQ81xIiBLYokJNoTfgQOixyiIg&libraries=geometry&callback=initMap">
+    </script>
+	
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	
+
+
+	<input type="button" value = "Back", onclick="window.location.href='./index.html'">
+
+	
+	
+	
+  </body>
+</html>
