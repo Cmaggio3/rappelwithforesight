@@ -93,7 +93,7 @@
 	
 		function PopulateSelected(){
 			var selectedLocationId =GetURLParameter('LocationId')
-			selectedLocationId = 42
+			//selectedLocationId = 42
 			$.ajax({
 				url: "https://rappelwithforesightapi.herokuapp.com/Locations/"+selectedLocationId,
 				type: 'GET',
