@@ -44,7 +44,7 @@
 						url:url
 					},
 					label:{
-						text:location.LocationName,
+						text:location.Name,
 						color:'grey'
 					}
 				});
@@ -56,7 +56,7 @@
 						//infowindow.open(map,marker);
 						window.location.href = "./Location.html?LocationId="+content.LocationId
 						
-						document.getElementById("displayLocationName").innerHTML = content.LocationName;
+						document.getElementById("displayLocationName").innerHTML = content.Name;
 						document.getElementById("displayLocationLat").innerHTML = content.Latitude;
 						document.getElementById("displayLocationLng").innerHTML = content.Longitude;
 					};

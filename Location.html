@@ -51,8 +51,6 @@
 			]
 		function showSelectedLocation(location){
 			var map = new google.maps.Map(document.getElementById('map'),{zoom:6});
-			console.log('hello')
-			console.log(eval(location.Markers))
 			var markers = eval(location.Markers)
 			for(var i = 0; i < markers.length; i++){
 				var latlong = {lat: parseFloat(markers[i].lat),lng:parseFloat(markers[i].lng)} 
@@ -113,12 +111,12 @@
 			map.setCenter(marker.getPosition())
 			
 			//populate the text fields
-			document.getElementById(name).innerHTML = location.Name
-			document.getElementById(status).innerHTML = location.Danger
-			document.getElementById(weather).innerHTML = location.Weather
-			document.getElementById(nearestHospital).innerHTML = location.NearestHospital
-			document.getElementById(permits).innerHTML = location.Permits
-			document.getElementById(longestRappel).innerHTML = location.LongestRappel
+			document.getElementById("name").innerHTML = location.Name
+			document.getElementById("status").innerHTML = location.Danger
+			document.getElementById("weather").innerHTML = location.Weather
+			document.getElementById("nearestHospital").innerHTML = location.NearestHospital
+			document.getElementById("permits").innerHTML = location.Permits
+			document.getElementById("longestRappel").innerHTML = location.LongestRappel
 		}
 	
 		function PopulateSelected(){
