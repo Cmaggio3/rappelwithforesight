@@ -132,7 +132,7 @@
 	<script>
 		function Publish(){
 			//test insertion into locations
-			var data = {Latitude: startLat, Longitude: startLng, Name: name,NearestHospital:nearestHospital,RequiredPermits:requiredPermits,LongestRappel:longestRappel,Markers:markers,Route:encodedPath}
+			var data = {Latitude: startLat, Longitude: startLng, Name: name,NearestHospital:nearestHospital,Permits:requiredPermits,LongestRappel:longestRappel,Markers:markers,Route:encodedPath}
 			
 			var saveData = $.ajax({
 				type: "POST",
