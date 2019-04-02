@@ -16,7 +16,29 @@
     <!--The div element for the map -->
     <div id="map"></div>
 	
-
+	<p style="display:inline">Location: </p>
+	<p style="display:inline" id="name"></p>
+	<p></p>
+	
+	<p style="display:inline">Safety Status: </p>
+	<p style="display:inline" id="status"></p>
+	<p></p>
+	
+	<p style="display:inline">Weather: </p>
+	<p style="display:inline" id="weather"></p>
+	<p></p>
+	
+	<p style="display:inline">Nearest Hospital: </p>
+	<p style="display:inline" id="nearestHospital"></p>
+	<p></p>
+	
+	<p style="display:inline">Required Permits: </p>
+	<p style="display:inline" id="permits"></p>
+	<p></p>
+	
+	<p style="display:inline">Longest Rappel: </p>
+	<p style="display:inline" id="longestRappel"></p>
+	<p></p>
 
 	<script>
 		var options = [
@@ -24,7 +46,7 @@
 				{name:"end",color:"https://map.google.com/mapfiles/ms/icons/red-dot.png"},
 				{name:"Long Rappel",color:"https://map.google.com/mapfiles/ms/icons/blue-dot.png"},
 				{name:"Short Rappel",color:"https://map.google.com/mapfiles/ms/icons/blue-dot.png"},
-				{name:"Slide",color:"https://map.google.com/mapfiles/ms/icons/yellow-dot.png"},
+				{name:"Hazard",color:"https://map.google.com/mapfiles/ms/icons/yellow-dot.png"},
 				{name:"Route",color:"something's wrong"}
 			]
 		function showSelectedLocation(location){
@@ -47,7 +69,7 @@
 				{
 					url = "https://map.google.com/mapfiles/ms/icons/blue-dot.png"
 				}
-				if(markers[i].type == "Slide")
+				if(markers[i].type == "Hazard")
 				{
 					url = "https://map.google.com/mapfiles/ms/icons/yellow-dot.png"
 				}
@@ -89,6 +111,14 @@
 				
 				
 			map.setCenter(marker.getPosition())
+			
+			//populate the text fields
+			document.getElementById(name).innerHTML = location.Name
+			document.getElementById(status).innerHTML = location.Danger
+			document.getElementById(weather).innerHTML = location.Weather
+			document.getElementById(nearestHospital).innerHTML = location.NearestHospital
+			document.getElementById(permits).innerHTML = location.Permits
+			document.getElementById(longestRappel).innerHTML = location.LongestRappel
 		}
 	
 		function PopulateSelected(){
