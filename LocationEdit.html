@@ -16,18 +16,29 @@
     <!--The div element for the map -->
     <div id="map"></div>
 	
-	<input type="button" value = "Back", onclick="window.location.href='.index.html"></input>
 	<select id="dropdown" onChange="selectionMade()"></select>
 	<input type="button" value = "Publish", onclick="Publish()"></input>
     <span id="fromAjax"></span>	
 	
 	<div>Location Data</div>
 	
-    <input type="text" id="locationName" />
-	<button onclick="myJsFunction()">Update Name</button>
+	<p style="display:inline">Location Name: </p>
+    <input type="text" id="Name" />
+	<p style="display:inline">Nearest Hospital: </p>
+	<input type="text" id="Nearest Hospital" />
+	<p style="display:inline">Required Permits: </p>
+	<input type="text" id="Required Permits" />
+	<p style="display:inline">Longest Rappel: </p>
+	<input type="text" id="Longest Rappel" />
+	
+	
+	<button onclick="updateValues()">Update Location Fields</button>
 	<script type="text/javascript">
-	 function myJsFunction(){
-		locationName=document.getElementById('locationName').value;
+	 function updateValues(){
+		name=document.getElementById('Name').value;
+		nearestHospital=document.getElementById('Nearest Hospital').value;
+		requiredPermits=document.getElementById('Required Permits').value;
+		longestRappel=document.getElementById('Longest Rappel').value;
 	 }
 	</script>
 	
@@ -35,7 +46,7 @@
 	
 		var markers =[]
 		var encodedPath = ""
-		var locationName = document.getElementById("locationName").value
+		var name = document.getElementById("Name").value
 		var startLat = ""
 		var startLng = ""
 	
@@ -121,8 +132,8 @@
 	<script>
 		function Publish(){
 			//test insertion into locations
-			var data = {Latitude: startLat, Longitude: startLng, LocationName: locationName,Markers:markers,Route:encodedPath}
-			console.log(data)
+			var data = {Latitude: startLat, Longitude: startLng, Name: name,NearestHospital:nearestHospital,RequiredPermits:requiredPermits,LongestRappel:longestRappel,Markers:markers,Route:encodedPath}
+			
 			var saveData = $.ajax({
 				type: "POST",
 				url: "https://rappelwithforesightapi.herokuapp.com/Locations",
