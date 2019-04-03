@@ -20,8 +20,8 @@
 	<p style="display:inline" id="name"></p>
 	<p></p>
 	
-	<p style="display:inline">Safety Status: </p>
-	<p style="display:inline" id="status"></p>
+	<p style="display:inline">Danger: </p>
+	<p style="display:inline" id="danger"></p>
 	<p></p>
 	
 	<p style="display:inline">Weather: </p>
@@ -112,7 +112,22 @@
 			
 			//populate the text fields
 			document.getElementById("name").innerHTML = location.Name
-			document.getElementById("status").innerHTML = location.Danger
+			if(location.Danger == 3)
+			{
+				document.getElementById("danger").innerHTML = "Water levels are high and rising"
+			}
+			if(location.Danger == 2)
+			{
+				document.getElementById("danger").innerHTML = "Water levels are high
+			}
+			if(location.Danger == 1)
+			{
+				document.getElementById("danger").innerHTML = "Water levels are rising
+			}
+			if(location.Danger == 0)
+			{
+				document.getElementById("danger").innerHTML = "Water levels safe
+			}
 			document.getElementById("weather").innerHTML = location.Weather
 			document.getElementById("nearestHospital").innerHTML = location.NearestHospital
 			document.getElementById("permits").innerHTML = location.Permits
