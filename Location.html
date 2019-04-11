@@ -48,7 +48,7 @@
 			var selectedLocationId =GetURLParameter('LocationId')
 			var saveData = $.ajax({
 				type: "POST",
-				url: "https://rappelwithforesightapi.herokuapp.com/Locations/"+selectedLocationId+"/delete/",
+				url: "https://rappelwithforesightapi.herokuapp.com/locations/"+selectedLocationId+"/delete/",
 				dataType: "json",
 			});
 		}
