@@ -40,7 +40,7 @@
 	<p style="display:inline" id="longestRappel"></p>
 	<p></p>
 
-	<input type="button" value = "Publish", onclick="Delete()"></input>
+	<input type="button" value = "Delete", onclick="Delete()"></input>
 	
 	<script>
 		function Delete(){
@@ -49,7 +49,6 @@
 			var saveData = $.ajax({
 				type: "POST",
 				url: "https://rappelwithforesightapi.herokuapp.com/Locations/"+selectedLocationId+"/delete/",
-				data: data,
 				dataType: "json",
 			});
 		}
