@@ -40,6 +40,21 @@
 	<p style="display:inline" id="longestRappel"></p>
 	<p></p>
 
+	<input type="button" value = "Publish", onclick="Delete()"></input>
+	
+	<script>
+		function Delete(){
+
+			var selectedLocationId =GetURLParameter('LocationId')
+			var saveData = $.ajax({
+				type: "POST",
+				url: "https://rappelwithforesightapi.herokuapp.com/Locations/"+selectedLocationId+"/delete/",
+				data: data,
+				dataType: "json",
+			});
+		}
+	</script>
+	
 	<script>
 		var options = [
 				{name:"start",color:"https://map.google.com/mapfiles/ms/icons/green-dot.png"},
